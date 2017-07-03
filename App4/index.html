@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>App4</title>
+    
+    <link href="css/default.css" rel="stylesheet" />
+    <style>
+        #map{
+            height:400px;
+            width:100%;
+           
+        }
+    </style>
+</head>
+<body>
+    <h1>My Google Map</h1>
+    <div id="map"></div>
+   <script>
+       function initMap() {
+           // Map options
+           var options  = {
+               zoom: 8,
+               center: {lat: 33.7825, lng: -117.2286}
+           }
+           var map = new google.maps.Map(document.getElementById('map'), options);
+
+           //Listen for click on map
+           google.maps.event.addListener(map, 'click',
+               function (event) {
+                   addMarker({ coords: event.latLng });
+
+               });
+           // New map
+           var markers = [
+               {
+                   coords: {lat: 33.8000, lng: -117.2235 },
+                   iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                   content: '<h1>Perris California</h1>'
+               },
+               {
+                   coords: { lat: 33.8366, lng: -117.9143 },
+                   content: '<h1>Anaheim California</h1>'
+              }
+
+           ]
+           for (var i = 0; i < markers.length; i++) {
+               addMarker(markers[i]);
+           }
+
+         
+           function addMarker(props) {
+               var marker = new google.maps.Marker({
+                   position: props.coords,
+                   map: map,
+                   //icon: props.iconImage
+
+               });
+
+               //Check if iconImage exists
+               if (props.iconImage) {
+                   //set icon image
+                   marker.setIcon(props.iconImage);
+               }
+               //Check Content
+               if (props.content) {
+                   var infoWindow = new google.maps.InfoWindow({
+                       content: props.content
+                   });
+                   marker.addListener('click', function () {
+                       infoWindow.open(map, marker);
+                   });
+               }
+           }
+       }
+   </script>
+    <script src="js/main.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmKoGB7iZfHeA77jgFJF4A-Jv-09U8J64&callback=initMap">
+    </script>
+
+</body>
+</html>
